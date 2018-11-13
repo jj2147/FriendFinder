@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>survey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div>
+        <form id="name-photo">
+            Name:<br>
+            <input type="text" name="name"><br>
+            Link to photo:<br>
+            <input type="text" name="photo">
+        </form>
+    </div>
+    <div id="question-div">
+
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="submit-btn">submit (must fill in every form!)</button>
+
+
+
+<script>
+
+
+const questions = [
+    "Your mind is always buzzing with unexplored ideas and plans.",
+    "Generally speaking, you rely more on your experience than your imagination.",
+    "You find it easy to stay relaxed and focused even when there is some pressure.",
+    "You rarely do something just out of sheer curiosity.",
+    "People can rarely upset you.",
+    "It is often difficult for you to relate to other people’s feelings.",
+    "In a discussion, truth should be more important than people’s sensitivities.",
+    "You rarely get carried away by fantasies and ideas.",
+    "You think that everyone’s views should be respected regardless of whether they are supported by facts or not.",
+    "You feel more energetic after spending time with a group of people."
+];
+
+
+questions.forEach(function(i){
+    $("#question-div").append("<form >" + i + 
+        "<br><input type='radio' name='radio' value='1' required>1 &nbsp" +
+        "<input type='radio' name='radio' value='2'>2 &nbsp" +
+        "<input type='radio' name='radio' value='3'>3 &nbsp" +
+        "<input type='radio' name='radio' value='4'>4 &nbsp" +
+        "<input type='radio' name='radio' value='5'>5 &nbsp" +
+        "</form>");
+});
+
+$("#submit-btn").on("click", function(event){
+    event.preventDefault();
+
+    var SArray = $("form").serializeArray();
+    console.log(SArray);
+
+
+    var scores = [];
+    for(var i=2; i<12; i++){
+        scores.push(SArray[i].value);
+    }
+
+    var friendsObj = {
+        "name": SArray[0].value,
+        "photo": SArray[1].value,
+        "scores": scores,
+    }
+    
+    $.post("/api/friends", friendsObj, function(data) {
+        console.log("posted" + friendsObj);
+        
+    });
+
+});
+
+
+
+
+
+</script>
+
+</body>
+</html>
